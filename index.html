@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Gen Wears | Official Store</title>
+    <style>
+        :root {
+            --bg-white: #ffffff;
+            --bg-dark: #0b0b0b;
+            --text-main: #000000;
+            --text-muted: #666666;
+            --accent-green: #44db5e;
+            --font-main: 'Helvetica Neue', Arial, sans-serif;
+            --font-logo: 'Baskerville', 'Georgia', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg-white);
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        /* --- QUICK REVIEW OVERLAY STYLES --- */
+        #qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 10000;
+            display: none;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .qr-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .qr-close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .qr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 50px;
+        }
+
+        .qr-grid img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            background: #f9f9f9;
+        }
+
+        .qr-details {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .qr-btn-buy {
+            background: #000;
+            color: #fff;
+            padding: 15px 40px;
+            border: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Hover Button Logic */
+        .img-container {
+            position: relative;
+        }
+
+        .quick-rev-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .card:hover .quick-rev-btn {
+            opacity: 1;
+        }
+
+        .chat-widget {
+            position: fixed;
+            bottom: 85px;
+            right: 15px;
+            background: #2c2c2c;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-widget::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 1px solid #2c2c2c;
+        }
+
+        .currency-selector {
+            position: fixed;
+            bottom: 85px;
+            left: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            color: white;
+        }
+
+        .logo {
+            font-family: var(--font-logo);
+            font-size: 22px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .hero {
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 80px;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .hero-btn {
+            background: white;
+            color: black;
+            padding: 12px 25px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .section-padding {
+            padding: 40px 15px;
+        }
+
+        .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .heading {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            text-align: center;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .p-name {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .p-price {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #f4f4f4;
+            width: fit-content;
+            margin: 8px auto;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .size-box {
+            font-size: 10px;
+            border: 1px solid #eee;
+            padding: 2px 5px;
+            color: #999;
+            background: transparent;
+        }
+
+        .cart-btn {
+            position: fixed;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1000;
+            border: 1px solid #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .checkout-section {
+            padding: 60px 20px;
+            background: #fff;
+        }
+
+        .checkout-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .checkout-form, .about-content {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .discount-bar {
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 60px 20px 100px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background: #f9f9f9;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        @media (max-width: 600px) { .qr-grid { grid-template-columns: 1fr; } }
+        @media (min-width: 768px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+    </style>
+</head>
+
+<body>
+
+    <div id="qr-modal">
+        <div class="qr-container">
+            <span class="qr-close" onclick="closeQR()">&#10005;</span>
+            <div class="qr-grid" id="qr-images"></div>
+            
+            <div class="qr-details">
+                <h2 id="qr-title">PRODUCT NAME</h2>
+                <p id="qr-price" style="font-weight: bold; font-size: 18px; margin-bottom: 20px;">₦0.00</p>
+
+                <div style="margin-bottom: 20px;">
+                    <p class="label">Select Gender</p>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 5px;">
+                        <button class="size-box" style="padding: 10px 20px; cursor: pointer;" onclick="selectOption(this)">MALE</button>
+                        <button class="size-box" style="padding: 10px 20px; cursor: pointer;" onclick="selectOption(this)">FEMALE</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <p class="label">Select Size</p>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 5px;">
+                        <button class="size-box" style="width: 45px; height: 45px; cursor: pointer;" onclick="selectOption(this)">S</button>
+                        <button class="size-box" style="width: 45px; height: 45px; cursor: pointer;" onclick="selectOption(this)">M</button>
+                        <button class="size-box" style="width: 45px; height: 45px; cursor: pointer;" onclick="selectOption(this)">L</button>
+                        <button class="size-box" style="width: 45px; height: 45px; cursor: pointer;" onclick="selectOption(this)">XL</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <p class="label">Choose Color</p>
+                    <select id="qr-color" style="width: 100%; max-width: 300px; padding: 12px; border: 1px solid #000; text-transform: uppercase;">
+                        <option value="original">Original Style</option>
+                        <option value="black">Deep Black</option>
+                        <option value="stone">Stone Wash</option>
+                        <option value="limited">Limited Edition</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                    <button class="qr-btn-buy" style="width: 100%; max-width: 300px; background: #444;" onclick="updateCart(1); alert('Added to collection!')">ADD TO CART</button>
+                    <button class="qr-btn-buy" style="width: 100%; max-width: 300px;" onclick="buyItNow()">BUY IT NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <span>&#9776;</span>
+        <div class="logo">highfashion</div>
+        <div>&#128269; &nbsp; &#128722;</div>
+    </header>
+
+    <div class="currency-selector">NGN &#9662;</div>
+    <div class="chat-widget">Chat with us</div>
+    <div class="cart-btn" onclick="goToCheckout()">PICKED ITEMS: <span id="cart-count">0</span></div>
+
+    <section class="hero" style="background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('./photos/1.jpeg');">
+        <p class="hero-title">Explore Our New Collection</p>
+        <a href="#" class="hero-btn">SHOP NOW</a>
+    </section>
+
+    <div class="discount-bar">First time buyers get 10% discount</div>
+
+    <section class="section-padding">
+        <p class="label">New In</p>
+        <h2 class="heading">Explore Our New Collection</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/2.jpeg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/jacket.jpg', './photos/tol.jpg', './photos/back.jpg', './photos/imgi_47_HFNOV3.jpg', 'HF Stone Leather Jacket', '₦1,350,000.00')">Quick Review</button>
+                </div>
+                <p class="p-name">HF Stone Leather Jacket</p>
+                <p class="p-price">₦1,350,000.00</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/3.jpeg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/imgi_47_HFNOV3.jpg', './photos/jacket.jpg', './photos/12.jpg', './photos/back.jpg', 'HF Embossed Leather Jacket', '₦1,350,000.00')">Quick Review</button>
+                </div>
+                <p class="p-name">HF Embossed Leather Jacket</p>
+                <p class="p-price">₦1,350,000.00</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/4.jpeg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/trouser.jpg', './photos/imgi_44_HFNOV31.jpg', './photos/cmm.jpg', './photos/33.jpg', 'HF BALACLAVA RHINESTONE HOODIE PANTS', '₦472,500.00')">Quick Review</button>
+                </div>
+                <p class="p-name">HF BALACLAVA RHINESTONE HOODIE PANTS</p>
+                <p class="p-price">₦472,500.00</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/5.jpeg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/imgi_44_HFNOV31.jpg', './photos/trouser.jpg', './photos/100.jpg', './photos/101.jpg', 'HF Balaclava Rhinestone Hoodie Top', '₦472,500.00')">Quick Review</button>
+                </div>
+                <p class="p-name">HF Balaclava Rhinestone Hoodie Top</p>
+                <p class="p-price">₦472,500.00</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/6.jpeg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/8.jpg', './photos/jacket.jpg', './photos/trouser.jpg', './photos/1.jpg', 'HF knitted Jumper', '$239.73')">Quick Review</button>
+                </div>
+                <p class="p-name">HF knitted Jumper</p>
+                <p class="p-price">$239.73</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/7.jpeg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/imgi_37_HFNOV33.jpg', './photos/cmm.jpg', './photos/8.jpg', './photos/1.jpg', 'HF DOMINION TRACKSUIT TOP', '$287.67')">Quick Review</button>
+                </div>
+                <p class="p-name">HF DOMINION TRACKSUIT TOP</p>
+                <p class="p-price">$287.67</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/cmm.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/cmm.jpg', './photos/imgi_37_HFNOV33.jpg', './photos/7.jpg', './photos/1.jpg', 'HF DOMINION TRACKSUIT PANTS', '$287.67')">Quick Review</button>
+                </div>
+                <p class="p-name">HF DOMINION TRACKSUIT PANTS</p>
+                <p class="p-price">$287.67</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/imgi_42_HF_SEPT7.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/imgi_42_HF_SEPT7.jpg', './photos/1.jpg', './photos/2.jpg', './photos/10.jpg', 'Hf DISCIPLES CLASSIC TEE', '$191.78')">Quick Review</button>
+                </div>
+                <p class="p-name">Hf DISCIPLES CLASSIC TEE</p>
+                <p class="p-price">$191.78</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/3.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/3.jpg', './photos/4.jpg', './photos/12.jpg', './photos/jacket.jpg', 'HF CROC LEATHER TOP', '$719.18')">Quick Review</button>
+                </div>
+                <p class="p-name">HF CROC LEATHER TOP</p>
+                <p class="p-price">$719.18</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/4.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/4.jpg', './photos/3.jpg', './photos/jacket.jpg', './photos/8.jpg', 'HF CROC LEATHER PANTS', '$719.18')">Quick Review</button>
+                </div>
+                <p class="p-name">HF CROC LEATHER PANTS</p>
+                <p class="p-price">$719.18</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/1.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/1.jpg', './photos/2.jpg', './photos/5.jpg', './photos/6.png', 'HF MESH LONGSLEEVE', '$191.78')">Quick Review</button>
+                </div>
+                <p class="p-name">HF MESH LONGSLEEVE</p>
+                <p class="p-price">$191.78</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/2.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/2.jpg', './photos/1.jpg', './photos/5.jpg', './photos/6.png', 'HF SHORTSLEEVE POLO', '$287.67')">Quick Review</button>
+                </div>
+                <p class="p-name">HF SHORTSLEEVE POLO</p>
+                <p class="p-price">$287.67</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/5.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/5.jpg', './photos/1.jpg', './photos/2.jpg', './photos/6.png', 'HF LONGSLEEVE POLO', '$335.62')">Quick Review</button>
+                </div>
+                <p class="p-name">HF LONGSLEEVE POLO</p>
+                <p class="p-price">$335.62</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/6.png">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/6.png', './photos/1.jpg', './photos/5.jpg', './photos/10.jpg', 'Hf REFLECTIVE TEE', '$191.78')">Quick Review</button>
+                </div>
+                <p class="p-name">Hf REFLECTIVE TEE</p>
+                <p class="p-price">$191.78</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/7.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/7.jpg', './photos/trouser.jpg', './photos/imgi_44_HFNOV31.jpg', './photos/1.jpg', 'HF MESH LONGSLEEVE HOODIE', '$239.73')">Quick Review</button>
+                </div>
+                <p class="p-name">HF MESH LONGSLEEVE HOODIE</p>
+                <p class="p-price">$239.73</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+            <div class="card">
+                <div class="img-container">
+                    <img src="./photos/10.jpg">
+                    <button class="quick-rev-btn" onclick="openQR('./photos/10.jpg', './photos/tol.jpg', './photos/1.jpg', './photos/6.png', 'HF CHECKERED TEE', '$287.67')">Quick Review</button>
+                </div>
+                <p class="p-name">HF CHECKERED TEE</p>
+                <p class="p-price">$287.67</p>
+                <div class="stepper"><span onclick="updateCart(-1)">-</span><span>QTY</span><span onclick="updateCart(1)">+</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="checkout-section" id="secure-checkout">
+        <div class="checkout-container">
+            <div class="checkout-form">
+                <h2 class="heading">Secure Checkout</h2>
+                <form>
+                    <div class="input-group"><label>Full Name</label><input type="text" placeholder="Enter your name" required></div>
+                    <div class="input-group"><label>Home Delivery Address</label><input type="text" placeholder="Lekki, Lagos, Nigeria" required></div>
+                    <div class="input-group"><label>Phone Number</label><input type="tel" placeholder="+234..." required></div>
+                    <div class="input-group"><label>Debit/Credit Card Number</label><input type="text" placeholder="0000 0000 0000 0000" required></div>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="input-group" style="flex: 2;"><label>Expiry Date</label><input type="text" placeholder="MM/YY" required></div>
+                        <div class="input-group" style="flex: 1;"><label>CVV</label><input type="password" placeholder="123" required></div>
+                    </div>
+                    <button type="submit" class="btn-pay">Pay & Order Now</button>
+                </form>
+            </div>
+            <div class="about-content">
+                <h2 class="heading">Why Choose New Gen Wears</h2>
+                <p style="font-size: 14px; line-height: 1.8; color: #444;">At New Gen Wears, we believe that your wardrobe is a canvas for your individuality. Every piece is crafted with the highest attention to detail, luxury fabrics, and a commitment to timeless street style.</p>
+                <div style="margin-top: 20px;">
+                    <p><strong>OFFICE ADDRESS:</strong></p>
+                    <p>SHOP 38/39, AARON'S LEKKI MALL, ADMIRALTY WAY, LAGOS, NIGERIA</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo" style="margin-bottom: 20px;">New gen Wears</div>
+        <p>Operating hours: Monday – Saturday (10am -8pm)</p>
+        <p>Lagos, Nigeria</p>
+    </footer>
+
+    <div class="bottom-nav">
+        <span>&#10094;</span><span>&#10095;</span><span>&#8682;</span><span>&#128214;</span><span>&#10064;</span>
+    </div>
+
+    <script>
+        let picks = 0;
+
+        function updateCart(change) {
+            picks += change;
+            if (picks < 0) picks = 0;
+            document.getElementById('cart-count').innerText = picks;
+        }
+
+        function goToCheckout() {
+            document.getElementById('secure-checkout').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function selectOption(btn) {
+            // Highlight selected button
+            btn.parentElement.querySelectorAll('button').forEach(b => {
+                b.style.background = 'transparent';
+                b.style.color = '#999';
+                b.style.borderColor = '#eee';
+            });
+            btn.style.background = '#000';
+            btn.style.color = '#fff';
+            btn.style.borderColor = '#000';
+        }
+
+        function buyItNow() {
+            updateCart(1);
+            closeQR();
+            // Smooth scroll to checkout
+            setTimeout(() => {
+                document.getElementById('secure-checkout').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        function openQR(img1, img2, img3, img4, title, price) {
+            const container = document.getElementById('qr-images');
+            container.innerHTML = `
+                <img src="${img1}"><img src="${img2}">
+                <img src="${img3}"><img src="${img4}">
+            `;
+            document.getElementById('qr-title').innerText = title;
+            document.getElementById('qr-price').innerText = price;
+            document.getElementById('qr-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQR() {
+            document.getElementById('qr-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+
+</body>
+</html>
